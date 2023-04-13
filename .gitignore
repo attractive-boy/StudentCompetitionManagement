@@ -3,3 +3,4 @@ back/package-lock.json
 web/node_modules/*
 web/package-lock.json
 web/.vscode/*
+back/.vscode/*
