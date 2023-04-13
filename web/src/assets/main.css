@@ -1,0 +1,13 @@
+@import './base.css';
+a {
+  text-decoration: none;
+  color: #217093;
+  transition: 0.4s;
+}
+
+@media (hover: hover) {
+  a:hover {
+    /* 透明度: 0.2 */
+    background-color: rgba(33, 112, 147, 0.2);
+  }
+}
