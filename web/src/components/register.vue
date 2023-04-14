@@ -171,22 +171,9 @@ const getEmailCode = () => {
 
 <template>
   <form v-on:submit="onSubmit">
-    <div class="inputGroup">
+    <div class="inputGroup" v-if="!forgotPassword">
       <label for="registerName" id="registerNameLabel">用户名</label>
       <input id="registerName" maxlength="254" name="registerName" />
-    </div>
-    <div class="inputGroup">
-      <label for="registerPassword" id="registerPasswordLabel">密码</label>
-      <input id="registerPassword" type="password" maxlength="254" name="registerPassword" />
-    </div>
-    <div class="inputGroup">
-      <label for="registerPasswordConfirm" id="registerPasswordConfirmLabel">确认密码</label>
-      <input
-        id="registerPasswordConfirm"
-        type="password"
-        maxlength="254"
-        name="registerPasswordConfirm"
-      />
     </div>
     <!-- 邮箱 -->
     <div class="inputGroup">
@@ -200,6 +187,19 @@ const getEmailCode = () => {
       <button class="getEmailCode" type="button" v-on:click="getEmailCode">
         {{ emailCodeText }}
       </button>
+    </div>
+    <div class="inputGroup">
+      <label for="registerPassword" id="registerPasswordLabel">密码</label>
+      <input id="registerPassword" type="password" maxlength="254" name="registerPassword" />
+    </div>
+    <div class="inputGroup">
+      <label for="registerPasswordConfirm" id="registerPasswordConfirmLabel">确认密码</label>
+      <input
+        id="registerPasswordConfirm"
+        type="password"
+        maxlength="254"
+        name="registerPasswordConfirm"
+      />
     </div>
     <!-- 角色: 教师/学生 -->
     <div class="inputGroup roleInput" v-if="!props.forgotPassword">

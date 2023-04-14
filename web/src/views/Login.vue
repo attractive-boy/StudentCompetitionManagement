@@ -1,19 +1,60 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 //导入assets文件夹下的js文件
-import initLogin from '@/assets/js/initlogin'
-
+import initLogin from '@/utils/initlogin'
+import request from '@/utils/request'
+//vue 路由跳转
+import router from '@/router'
+//store
+import { userInfoStore } from '@/stores/userInfo'
 const isRegister = ref(false)
 const forgotPassword = ref(false)
+const userInfo = userInfoStore()
 // 页面渲染完成后执行
 onMounted(() => {
   initLogin()
 })
+const onSubmitLogin = (e: Event) => {
+  e.preventDefault()
+  // 获取表单数据
+  const formData = new FormData(e.target as HTMLFormElement)
+  // 获取表单数据
+  const name:any = formData.get('loginName')
+  const password = formData.get('password')
+  // 验证表单数据
+  // 如果其中有一项为空,则提示用户
+  if (!name || !password) {
+    ElMessage.error(`${name ? '' : '用户名/邮箱 '}${password ? '' : '密码 '}不能为空`)
+    return
+  }
+  // 判断是不是邮箱
+  const isEmail = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/g.test(name)
+  // 发送请求
+  request
+    .post('/api/login', {
+      username: isEmail ? '' : name,
+      password,
+      email: isEmail ? name : ''
+    })
+    .then((res: any) => {
+      if (res.code === 200) {
+        ElMessage.success('登录成功')
+        //存储用户信息
+        userInfo.setUserInfo(res.email, res.username, res.role)
+        // 将token存储到本地
+        localStorage.setItem('token', res.token)
+        // 跳转到首页
+        router.push('/')
+      } else {
+        ElMessage.error(res.msg)
+      }
+    })
+}
 </script>
 
 <template>
   <div class="login">
-    <form v-show="!isRegister">
+    <form v-show="!isRegister" @submit="onSubmitLogin">
       <div class="svgContainer">
         <div>
           <svg
@@ -364,12 +405,12 @@ onMounted(() => {
         <h1>林科大竞赛管理系统</h1>
       </div>
       <div class="inputGroup inputGroup1">
-        <label for="loginEmail" id="loginEmailLabel">用户名</label>
-        <input type="email" id="loginEmail" maxlength="254" />
+        <label for="loginEmail" id="loginEmailLabel">用户名/邮箱</label>
+        <input type="email" id="loginEmail" maxlength="254" name="loginName" />
       </div>
       <div class="inputGroup inputGroup2">
         <label for="loginPassword" id="loginPasswordLabel">密码</label>
-        <input type="password" id="loginPassword" />
+        <input type="password" id="loginPassword" maxlength="254" name="password" />
         <label id="showPasswordToggle" for="showPasswordCheck"
           >显示密码
           <input id="showPasswordCheck" type="checkbox" />
@@ -379,7 +420,7 @@ onMounted(() => {
         <a id="forgotPassword" v-on:click="isRegister = true; forgotPassword = true">忘记密码?</a>
       </div>
       <div class="inputGroup inputGroup3">
-        <button id="login">登录</button>
+        <button id="login" type="submit">登录</button>
         <!-- 没有账号立即注册 -->
         <!-- 点击修改isRegister为true -->
         <a id="register" v-on:click="isRegister = true; forgotPassword = false">没有账号?立即注册</a>

@@ -11,3 +11,17 @@ a {
     background-color: rgba(33, 112, 147, 0.2);
   }
 }
+.el-dropdown__popper{
+  min-width: 150px !important;
+}
+.el-dropdown-menu__item{
+  font-size: 20px !important;
+  line-height: 40px !important;
+  /* 文字居中 */
+  text-align: center !important;
+  width: 100% !important;
+  display: block !important;
+}
+.el-form .el-form-item__label{
+  font-size: large;
+}

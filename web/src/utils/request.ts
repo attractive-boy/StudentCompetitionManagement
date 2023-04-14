@@ -2,8 +2,10 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 
+export const baseURL = 'http://localhost:81'
+
 const request = axios.create({
-  baseURL: 'http://localhost:81',
+  baseURL: baseURL,
   timeout: 10000
 })
 
@@ -28,6 +30,7 @@ const err = (error: any) => {
             localStorage.removeItem('token')
           }
           location.reload()
+          window.location.href = '/login'
         }
       })
     }

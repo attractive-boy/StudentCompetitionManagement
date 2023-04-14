@@ -11,7 +11,7 @@ router.post('/', async (req, res) => {
     'Select create_time from email_code where email = ? and code = ?',
     [email, emailCode]
   )
-  if (rows.length === 0) {
+  if (rows[0].length === 0) {
     res.status(200).json({
       message: '验证码错误',
       code: 200,

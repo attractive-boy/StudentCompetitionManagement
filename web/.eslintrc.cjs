@@ -11,13 +11,5 @@ module.exports = {
   ],
   parserOptions: {
     ecmaVersion: 'latest'
-  },
-  // 全局变量
-  globals: {
-    'ElMessage': true,
-  },
-  rules: {
-    //未声明关闭
-    'no-undef': 'off',
   }
 }
