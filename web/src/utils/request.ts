@@ -2,7 +2,7 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 
-export const baseURL = 'http://localhost:81'
+export const baseURL:string = 'http://localhost:81'
 
 const request = axios.create({
   baseURL: baseURL,

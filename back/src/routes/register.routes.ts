@@ -2,6 +2,8 @@ import { Router } from 'express'
 import dbConnect from '../utils/dbConnect'
 import sendEmail from '../utils/mailSend'
 import crypto from 'crypto'
+// uuid
+import { v4 as uuidv4 } from 'uuid'
 const router = Router()
 
 router.post('/', async (req, res) => {
@@ -40,9 +42,11 @@ router.post('/', async (req, res) => {
         const md5 = crypto.createHash('md5')
         md5.update(password)
         const md5Password = md5.digest('hex')
+        // 生成uuid
+        const uuid = uuidv4()
         await connection.execute(
-          'Insert into user (username, password, email, role) values (?, ?, ?, ?)',
-          [username, md5Password, email, role]
+          'Insert into user (username, password, email, role, id) values (?, ?, ?, ?, ?)',
+          [username, md5Password, email, role, uuid]
         )
         res.status(200).json({
           message: '注册成功',

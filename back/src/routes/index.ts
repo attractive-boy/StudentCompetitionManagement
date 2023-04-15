@@ -4,6 +4,9 @@ import forgotPasswordRouter from './forgotPassword.routes'
 import loginRouter from './login.routes'
 import changePasswordRouter from './changePassword.routes'
 import userInfo from './userInfo.routes'
+import fileRouter from './file.routes'
+import updateUserInfo from './updateUserInfo.routes'
+import officialNewsInfo from './officialNewsInfo.routes'
 // 路由配置
 interface RouterConf {
   path: string
@@ -31,6 +34,18 @@ const routerConf: Array<RouterConf> = [
   {
     path: '/api/userInfo',
     router: userInfo,
+  },
+  {
+    path: '/api/file',
+    router: fileRouter,
+  },
+  {
+    path: '/api/updateUserInfo',
+    router: updateUserInfo,
+  },
+  {
+    path: '/api/officialNewsInfo',
+    router: officialNewsInfo,
   },
 ]
 

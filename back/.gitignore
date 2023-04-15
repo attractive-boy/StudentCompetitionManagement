@@ -3,3 +3,4 @@ build
 .eslintcache
 yarn.lock
 package-lock.json
+uploads/*

@@ -25,6 +25,16 @@ const router = createRouter({
           name: 'usercenter',
           component: () => import('../views/UserCenter.vue')
         },
+        {
+          path: '/officialnews',
+          name: 'officialnews',
+          component: () => import('../views/OfficialNews.vue')
+        },
+        {
+          path: '/competition',
+          name: 'competition',
+          component: () => import('../views/Competition.vue')
+        }
       ]
     }
   ]

@@ -406,7 +406,7 @@ const onSubmitLogin = (e: Event) => {
       </div>
       <div class="inputGroup inputGroup1">
         <label for="loginEmail" id="loginEmailLabel">用户名/邮箱</label>
-        <input type="email" id="loginEmail" maxlength="254" name="loginName" />
+        <input id="loginEmail" maxlength="254" name="loginName" />
       </div>
       <div class="inputGroup inputGroup2">
         <label for="loginPassword" id="loginPasswordLabel">密码</label>
@@ -521,12 +521,7 @@ form {
     font-family: inherit;
   }
 
-  input[type='email'],
-  input[type='text'],
-  input[type='number'],
-  input[type='url'],
-  input[type='search'],
-  input[type='password'] {
+  input {
     display: block;
     margin: 0;
     padding: 0 1em 0;
