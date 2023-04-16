@@ -20,7 +20,7 @@ const err = (error: any) => {
         type: 'warning'
       })
     }
-    if (error.response.status === 401 && !(data.result && data.result.isLogin)) {
+    if (error.response.status === 401) {
       ElMessage({
         message: '授权失败，请重新登录',
         type: 'error',

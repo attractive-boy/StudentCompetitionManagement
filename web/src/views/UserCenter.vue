@@ -17,7 +17,7 @@ Mobile Number	手机号 -->
       <el-form-item label="邮箱" prop="email">
         <el-input v-model="form.email" placeholder="请输入邮箱"></el-input>
       </el-form-item>
-      <el-form-item label="学号" prop="studentId">
+      <el-form-item label="学号" prop="studentId" v-if="user.userInfo().role == 'student'">
         <el-input v-model="form.studentId" placeholder="请输入学号"></el-input>
       </el-form-item>
       <el-form-item label="性别" prop="gender">
@@ -52,6 +52,9 @@ Mobile Number	手机号 -->
 import { ref, reactive, onMounted } from 'vue'
 import request, { baseURL } from '@/utils/request'
 import type { FormInstance } from 'element-plus'
+import { userInfoStore } from '@/stores/userInfo'
+
+const user = userInfoStore()
 
 const ruleFormRef = ref<FormInstance>()
 const localStorage = window.localStorage
@@ -76,7 +79,6 @@ onMounted(async () => {
   form.email = data.email
 })
 const handleAvatarSuccess = (res: any, file: any) => {
-  console.log(res)
   form.avatar = baseURL + res.url
 }
 

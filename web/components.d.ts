@@ -46,6 +46,8 @@ declare module '@vue/runtime-core' {
     Register: typeof import('./src/components/register.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Video: typeof import('./src/components/Video.vue')['default']
+    VideoPlayer: typeof import('./src/components/VideoPlayer.vue')['default']
     VueHeader: typeof import('./src/components/VueHeader.vue')['default']
   }
 }

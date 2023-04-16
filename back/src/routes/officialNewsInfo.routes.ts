@@ -27,7 +27,6 @@ router.get('/', async (req, res) => {
     }`
   )
   const list: any = rows
-  console.log(list)
   // 给list加上第几个
   list.forEach((item, index) => {
     item.index = (page - 1) * pageSize + index + 1
@@ -61,7 +60,6 @@ router.post('/add', async (req, res) => {
 // 修改文章
 router.post('/edit', async (req, res) => {
   const { id, title, type, content, img } = req.body
-  console.log(id, title, type, content, img)
   const connection = await dbConnect()
   await connection.execute(
     'Update officialnews set title = ?, type = ?, content = ?, img = ? where id = ?',

@@ -11,10 +11,10 @@ a {
     background-color: rgba(33, 112, 147, 0.2);
   }
 }
-.el-dropdown__popper{
+.el-dropdown__popper {
   min-width: 150px !important;
 }
-.el-dropdown-menu__item{
+.el-dropdown-menu__item {
   font-size: 20px !important;
   line-height: 40px !important;
   /* 文字居中 */
@@ -22,6 +22,14 @@ a {
   width: 100% !important;
   display: block !important;
 }
-.el-form .el-form-item__label{
+.el-form .el-form-item__label {
   font-size: large;
+}
+.tox .tox-notification--warn,
+.tox .tox-notification--warning {
+  display: none !important;
+}
+.el-upload-list--text .el-upload-list__item.is-success .el-upload-list__item-status-label {
+  right: 0;
+  transform: translateX(15px);
 }

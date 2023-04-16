@@ -21,7 +21,7 @@
             <el-menu-item index="/changepassword">修改密码</el-menu-item>
             <el-menu-item index="/usercenter">个人中心</el-menu-item>
           </el-sub-menu>
-          <el-sub-menu index="2">
+          <el-sub-menu index="2" v-if="user.userInfo().role === 'teacher'">
             <template #title>
               <el-icon>
                 <document />
@@ -30,18 +30,8 @@
             </template>
             <el-menu-item index="/officialnews">公告信息</el-menu-item>
           </el-sub-menu>
-          <!-- 竞赛分类 -->
-          <el-sub-menu v-if="user.userInfo().role === 'teacher'" index="3">
-            <template #title>
-              <el-icon>
-                <document />
-              </el-icon>
-              <span>竞赛分类管理</span>
-            </template>
-            <el-menu-item index="/competitioncategory">竞赛分类</el-menu-item>
-          </el-sub-menu>
           <!-- 学生管理 -->
-          <el-sub-menu v-if="user.userInfo().role === 'teacher'" index="4">
+          <el-sub-menu v-if="user.userInfo().role === 'teacher'" index="3">
             <template #title>
               <el-icon>
                 <document />
@@ -50,16 +40,16 @@
             </template>
             <el-menu-item index="/student">学生</el-menu-item>
           </el-sub-menu>
-          <el-sub-menu index="5">
+          <el-sub-menu index="4">
             <template #title>
               <el-icon>
                 <document />
               </el-icon>
-              <span>竞赛信息管理</span>
+              <span>竞赛信息{{ user.userInfo().role == 'teacher' ? '管理' : '' }}</span>
             </template>
             <el-menu-item index="/competition">竞赛信息</el-menu-item>
           </el-sub-menu>
-          <el-sub-menu index="6">
+          <el-sub-menu index="5" v-if="user.userInfo().role === 'teacher'">
             <template #title>
               <el-icon>
                 <document />
@@ -68,12 +58,12 @@
             </template>
             <el-menu-item index="/competitionapply">竞赛报名</el-menu-item>
           </el-sub-menu>
-          <el-sub-menu index="7">
+          <el-sub-menu index="6">
             <template #title>
               <el-icon>
                 <document />
               </el-icon>
-              <span>竞赛成绩管理</span>
+              <span>竞赛成绩{{ user.userInfo().role == 'teacher' ? '管理' : '' }}</span>
             </template>
             <el-menu-item index="/competitionresult">竞赛成绩</el-menu-item>
           </el-sub-menu>

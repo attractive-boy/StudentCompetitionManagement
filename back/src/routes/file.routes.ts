@@ -67,7 +67,6 @@ router.get('/download/:id', async (req, res) => {
     [id]
   )
   if (rows[0] && rows[0].id === id) {
-    console.log(rows[0].mimetype)
     res.set('Content-Type', rows[0].mimetype)
     res.send(rows[0].file)
   } else {

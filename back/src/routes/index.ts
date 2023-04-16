@@ -7,6 +7,8 @@ import userInfo from './userInfo.routes'
 import fileRouter from './file.routes'
 import updateUserInfo from './updateUserInfo.routes'
 import officialNewsInfo from './officialNewsInfo.routes'
+import students from './students.routes'
+import competitionInfo from './competitonInfo.routes'
 // 路由配置
 interface RouterConf {
   path: string
@@ -46,6 +48,14 @@ const routerConf: Array<RouterConf> = [
   {
     path: '/api/officialNewsInfo',
     router: officialNewsInfo,
+  },
+  {
+    path: '/api/students',
+    router: students,
+  },
+  {
+    path: '/api/competition',
+    router: competitionInfo,
   },
 ]
 

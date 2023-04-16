@@ -21,7 +21,6 @@
         <el-form-item> <el-button type="primary" @click="search">搜索</el-button> </el-form-item>、
       </el-form>
     </div>
-    <!-- 表单:1、索引 2、公告标题 3、公告类型 4、公告图片 5、公告内容 6、发布时间 7、操作 表头固定，斑马纹，分页，每页显示10条，操作：编辑、删除，删除时弹出确认框，确认后删除 ，编辑时弹出编辑框 ，编辑框和添加框一样 ，添加按钮 ，添加时弹出添加框 ，添加框和编辑框一样 ，带边框，操作列固定，支持筛选和排序 宽度用百分比 -->
     <!-- 有索引的表格 -->
     <el-table
       :data="tableData"
@@ -30,7 +29,7 @@
       stripe
       :row-key="tableRowKey"
       :default-sort="defaultSort"
-      max-height="500"
+      max-height="450"
       :header-cell-style="{ background: 'RGB(50, 64, 87)', color: '#fff' }"
     >
       <el-table-column label="索引" width="180" prop="index"></el-table-column>
@@ -40,8 +39,6 @@
           <span>{{ transformNoticeType(scope.row.type) }}</span>
         </template>
       </el-table-column>
-      <!-- <el-table-column prop="img" label="公告图片" width="180"></el-table-column> -->
-      <!-- 是图片 -->
       <el-table-column prop="img" label="公告图片" width="180">
         <template #default="scope">
           <div v-for="item in scope.row.img" :key="item">
@@ -54,7 +51,17 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop="content" label="公告内容"></el-table-column>
+      <el-table-column prop="content" label="公告内容">
+        <template #default="scope">
+          <!-- 预览 -->
+          <el-popover placement="top" width="180" trigger="hover">
+            <div class="content" v-html="scope.row.content"></div>
+            <template #reference>
+              <el-button type="text" size="small">预览</el-button>
+            </template>
+          </el-popover>
+        </template>
+      </el-table-column>
       <!-- 格式化成年月日 -->
       <el-table-column prop="date" label="发布时间" width="180">
         <template #default="scope">
@@ -118,6 +125,7 @@
             :on-success="handleAvatarSuccess"
             :file-list="fileList"
             list-type="picture-card"
+            :limit="1"
           >
             <el-icon class="avatar-uploader-icon"><Plus /></el-icon>
           </el-upload>
@@ -125,8 +133,11 @@
             <img width="100%" :src="dialogImageUrl" alt="" />
           </el-dialog>
         </el-form-item>
-        <el-form-item label="公告内容" prop="content">
-          <el-input type="textarea" v-model="form.content"></el-input>
+        <el-form-item label="公告内容" prop="content" class="editor">
+          <Editor
+            api-key="h53l8ewpt6uv6bxgap7um5xfx3e6a37p1b13io4e6rnwt9lz"
+            v-model="form.content"
+          />
         </el-form-item>
       </el-form>
       <span class="dialog-footer">
@@ -141,6 +152,11 @@
 import { noticeType } from '@/enum'
 import { ref, reactive, onMounted } from 'vue'
 import request, { baseURL } from '@/utils/request'
+import { userInfoStore } from '@/stores/userInfo'
+// 导入tinyMCE
+import Editor from '@tinymce/tinymce-vue'
+
+const user = userInfoStore()
 
 const searchForm = reactive({
   title: '',
@@ -173,7 +189,6 @@ const search = async () => {
     }
   })
   let list = res.data.list
-  // img 转数组 '["http://localhost:81/api/file/download/721c0eb0-b518-4f48-9c63-a7a99ebef0bc"]'
   list.forEach((item: any) => {
     item.img = JSON.parse(item.img)
   })
@@ -276,7 +291,6 @@ const add = async () => {
 }
 
 const edit = async () => {
-  console.log(form)
   const res: any = await request.post('/api/officialNewsInfo/edit', form)
   if (res.code === 200) {
     dialogVisible.value = false
@@ -396,5 +410,11 @@ const handleCurrentChange = (val: number) => {
 .el-upload-list__item .el-upload-list__item-info {
   width: 100% !important;
   margin-left: 0;
+}
+.editor .el-form-item__content {
+  display: block;
+}
+.tox-statusbar__branding{
+  display: none;
 }
 </style>

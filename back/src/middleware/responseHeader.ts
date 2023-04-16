@@ -16,6 +16,8 @@ const responseHeader = (req: Request, res: Response, next: NextFunction) => {
   res.header('Access-Control-Allow-Methods', 'PUT,POST,GET,DELETE,OPTIONS')
   // 允许携带cookie
   res.header('Access-Control-Allow-Credentials', 'true')
+  // keepAliveTimeout: 60000
+  res.header('Keep-Alive', 'timeout=5, max=100')
 
   //预检返回204
   if (req.method == 'OPTIONS') {

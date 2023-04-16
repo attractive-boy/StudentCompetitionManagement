@@ -17,7 +17,10 @@ const jwt = (req: Request, res: Response, next: NextFunction) => {
   const token = req.headers.authorization?.split(' ')[1]
   const url = req.url
   // 如果是下载的get请求，不需要token
-  if (req.method === 'GET' && url.includes('/file/download')) {
+  if (
+    (req.method === 'GET' && url.includes('/file/download')) ||
+    (req.method === 'POST' && url.includes('/file/upload'))
+  ) {
     next()
   } else {
     if (whiteList.includes(url)) {
@@ -26,7 +29,6 @@ const jwt = (req: Request, res: Response, next: NextFunction) => {
       if (token) {
         verify(token, JWT_SECRET, (err: any, decoded: any) => {
           if (err) {
-            console.log(err.message)
             res.status(401).json({
               message: 'token失效，请重新登录',
               code: 401,
