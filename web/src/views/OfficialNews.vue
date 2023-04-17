@@ -231,6 +231,13 @@ const handleAdd = () => {
   //弹出添加框
   dialogVisible.value = true
   dialogTitle.value = '添加公告'
+  // 清空表单
+  form.title = ''
+  form.type = ''
+  form.img = []
+  form.content = ''
+  form.id = ''
+  fileList.splice(0, fileList.length)
 }
 
 const tableRowKey = (row: any) => {
@@ -414,7 +421,7 @@ const handleCurrentChange = (val: number) => {
 .editor .el-form-item__content {
   display: block;
 }
-.tox-statusbar__branding{
+.tox-statusbar__branding {
   display: none;
 }
 </style>

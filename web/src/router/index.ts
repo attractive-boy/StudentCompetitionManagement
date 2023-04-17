@@ -44,6 +44,11 @@ const router = createRouter({
           path: '/competitionapply',
           name: 'competitionapply',
           component: () => import('../views/CompetitionApply.vue')
+        },
+        {
+          path: '/competitionResult',
+          name: 'competitionResult',
+          component: () => import('../views/CompetitionResult.vue')
         }
       ]
     }

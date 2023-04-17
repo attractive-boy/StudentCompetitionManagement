@@ -1,6 +1,6 @@
 <template>
   <div class="officialNews">
-    <div class="search">
+    <div class="search" v-if="user.userInfo().role === 'teacher'">
       <span></span>
       <!-- 公告标题和公告类型的搜索摆在右边 element组件 -->
       <el-form :inline="true" :model="searchForm" class="demo-form-inline">
@@ -15,7 +15,7 @@
       </el-form>
     </div>
     <!-- 表单:1、索引 2、竞赛名称 3、竞赛类型 4、竞赛图片 5、参与人数 6、宣传视频 7、竞赛时间 8、竞赛地点 9、操作 
-       表头固定，斑马纹，分页，每页显示10条，操作：编辑、删除，删除时弹出确认框，确认后删除 ，编辑时弹出编辑框 ，编辑框和添加框一样 ，添加按钮 ，添加时弹出添加框 ，添加框和编辑框一样 ，带边框，操作列固定，支持筛选和排序 宽度用百分比 -->
+         表头固定，斑马纹，分页，每页显示10条，操作：编辑、删除，删除时弹出确认框，确认后删除 ，编辑时弹出编辑框 ，编辑框和添加框一样 ，添加按钮 ，添加时弹出添加框 ，添加框和编辑框一样 ，带边框，操作列固定，支持筛选和排序 宽度用百分比 -->
     <!-- 有索引的表格 -->
     <el-table
       :data="tableData"
@@ -27,13 +27,8 @@
       max-height="450"
       :header-cell-style="{ background: 'RGB(50, 64, 87)', color: '#fff' }"
     >
-      <el-table-column type="index" label="序号" width="50"></el-table-column>
+      <el-table-column type="index" label="序号" width="100"></el-table-column>
       <el-table-column prop="title" label="竞赛名称" width="150"></el-table-column>
-      <el-table-column prop="type" label="竞赛类型" width="100">
-        <template #default="scope">
-          <span>{{ competitionType[scope.row.type - 1].label }}</span>
-        </template>
-      </el-table-column>
       <el-table-column prop="time" label="竞赛时间" width="200">
         <template #default="scope">
           <span>{{ new Date(scope.row.time).toLocaleString() }}</span>
@@ -44,25 +39,14 @@
       <!-- 学号 -->
       <el-table-column prop="studentId" label="学号" width="150"></el-table-column>
       <el-table-column prop="name" label="姓名" width="150"></el-table-column>
-      <el-table-column prop="mobile" label="联系方式" width="150"></el-table-column>
-      <el-table-column prop="remark" label="备注"></el-table-column>
-      <el-table-column label="操作" width="150">
+      <el-table-column prop="mobile" label="联系方式"></el-table-column>
+      <el-table-column prop="grade" label="成绩" width="150"></el-table-column>
+      <el-table-column prop="rank" label="排名" width="150"></el-table-column>
+      <el-table-column label="操作" width="150" v-if="user.userInfo().role == 'teacher'">
         <template #default="scope">
-          <!-- 删除二次确认 -->
-          <el-popconfirm
-            v-if="user.userInfo().role === 'teacher'"
-            placement="top"
-            width="180"
-            trigger="click"
-            title="确定取消该生资格吗？，取消后需要重新报名。"
-            confirm-button-text="确定"
-            cancel-button-text="取消"
-            @confirm="handleDelete(scope.$index, scope.row)"
-          >
-            <template #reference>
-              <el-button type="text" size="small">取消资格</el-button>
-            </template>
-          </el-popconfirm>
+          <el-button type="text" size="small" @click="markGrade(scope.$index, scope.row)">
+            打分
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -79,7 +63,6 @@
 </template>
 
 <script lang="ts" setup>
-import { competitionType } from '@/enum'
 import { ref, reactive, onMounted } from 'vue'
 import request from '@/utils/request'
 import { userInfoStore } from '@/stores/userInfo'
@@ -98,6 +81,10 @@ onMounted(() => {
   search()
 })
 const search = async () => {
+  //如果是学生就只能看到自己的
+  if (user.userInfo().role == 'student') {
+    searchForm.studentId = user.userInfo().studentId
+  }
   const res = await request.get('/api/competitionApply', {
     params: {
       ...searchForm,
@@ -108,18 +95,6 @@ const search = async () => {
   let list = res.data.list
   tableData.splice(0, tableData.length, ...list)
   totalNum.value = res.data.total
-}
-
-const handleDelete = async (index: number, row: any) => {
-  const res: any = await request.post('/api/competitionApply/delete', {
-    id: row.id
-  })
-  if (res.code === 200) {
-    tableData.splice(index, 1)
-    ElMessage.success('删除成功')
-  } else {
-    ElMessage.error('删除失败')
-  }
 }
 
 const tableRowKey = (row: any) => {
@@ -134,6 +109,25 @@ const defaultSort = {
 const handleCurrentChange = (val: number) => {
   currentPage.value = val
   search()
+}
+const markGrade = async (index: number, row: any) => {
+  //   弹出打分框
+  ElMessageBox.prompt('请输入成绩', '打分', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    inputPattern: /^[1-9]\d*$/,
+    inputErrorMessage: '成绩必须为正整数'
+  }).then(async ({ value }) => {
+    const res: any = await request.post('/api/competitionApply/grade', {
+      id: row.id,
+      grade: value,
+      parentId: row.parentid
+    })
+    if (res.code === 200) {
+      ElMessage.success('打分成功')
+      search()
+    }
+  })
 }
 </script>
 

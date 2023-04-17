@@ -2,8 +2,13 @@
   <div class="officialNews">
     <div class="search">
       <!-- el-icon 矩形中间一个加号的按钮，最左边用于新增 -->
-      <el-button v-if="user.userInfo().role === 'teacher'" @click="handleAdd" class="add-icon search-plus-button"
-        type="primary">+</el-button>
+      <el-button
+        v-if="user.userInfo().role === 'teacher'"
+        @click="handleAdd"
+        class="add-icon search-plus-button"
+        type="primary"
+        >+</el-button
+      >
       <span v-else></span>
       <!-- 公告标题和公告类型的搜索摆在右边 element组件 -->
       <el-form :inline="true" :model="searchForm" class="demo-form-inline">
@@ -12,8 +17,12 @@
         </el-form-item>
         <el-form-item label="竞赛类型">
           <el-select v-model="searchForm.type" placeholder="请选择竞赛类型">
-            <el-option v-for="item in competitionType" :key="item.value" :label="item.label"
-              :value="item.value"></el-option>
+            <el-option
+              v-for="item in competitionType"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
           </el-select>
         </el-form-item>
         <!-- 竞赛地点 -->
@@ -26,8 +35,16 @@
     <!-- 表单:1、索引 2、竞赛名称 3、竞赛类型 4、竞赛图片 5、参与人数 6、宣传视频 7、竞赛时间 8、竞赛地点 9、操作 
        表头固定，斑马纹，分页，每页显示10条，操作：编辑、删除，删除时弹出确认框，确认后删除 ，编辑时弹出编辑框 ，编辑框和添加框一样 ，添加按钮 ，添加时弹出添加框 ，添加框和编辑框一样 ，带边框，操作列固定，支持筛选和排序 宽度用百分比 -->
     <!-- 有索引的表格 -->
-    <el-table :data="tableData" style="width: 100%" border stripe :row-key="tableRowKey" :default-sort="defaultSort"
-      max-height="450" :header-cell-style="{ background: 'RGB(50, 64, 87)', color: '#fff' }">
+    <el-table
+      :data="tableData"
+      style="width: 100%"
+      border
+      stripe
+      :row-key="tableRowKey"
+      :default-sort="defaultSort"
+      max-height="450"
+      :header-cell-style="{ background: 'RGB(50, 64, 87)', color: '#fff' }"
+    >
       <el-table-column type="index" label="序号" width="100"></el-table-column>
       <el-table-column prop="title" label="竞赛名称" width="150"></el-table-column>
       <el-table-column prop="type" label="竞赛类型" width="150">
@@ -38,7 +55,11 @@
       <el-table-column prop="img" label="竞赛图片" width="150">
         <template #default="scope">
           <div v-for="item in scope.row.img" :key="item">
-            <el-image style="width: 100px; height: 100px" :src="item" :preview-src-list="scope.row.img">
+            <el-image
+              style="width: 100px; height: 100px"
+              :src="item"
+              :preview-src-list="scope.row.img"
+            >
             </el-image>
           </div>
         </template>
@@ -61,25 +82,47 @@
       <el-table-column prop="address" label="竞赛地点"></el-table-column>
       <el-table-column label="操作" width="150">
         <template #default="scope">
-          <el-button v-if="user.userInfo().role === 'teacher'" type="text"
-            @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+          <el-button
+            v-if="user.userInfo().role === 'teacher'"
+            type="text"
+            @click="handleEdit(scope.$index, scope.row)"
+            >编辑</el-button
+          >
           <!-- 删除二次确认 -->
-          <el-popconfirm v-if="user.userInfo().role === 'teacher'" placement="top" width="180" trigger="click"
-            title="确定删除吗？" confirm-button-text="确定" cancel-button-text="取消"
-            @confirm="handleDelete(scope.$index, scope.row)">
+          <el-popconfirm
+            v-if="user.userInfo().role === 'teacher'"
+            placement="top"
+            width="180"
+            trigger="click"
+            title="确定删除吗？"
+            confirm-button-text="确定"
+            cancel-button-text="取消"
+            @confirm="handleDelete(scope.$index, scope.row)"
+          >
             <template #reference>
               <el-button type="text" size="small">删除</el-button>
             </template>
           </el-popconfirm>
           <!-- 报名 -->
-          <el-button v-if="user.userInfo().role == 'student'" type="text"
-            @click="openSignUp(scope.$index, scope.row)">报名</el-button>
+          <el-button
+            v-if="user.userInfo().role == 'student'"
+            type="text"
+            :disabled="scope.row.isSignUp"
+            @click="openSignUp(scope.$index, scope.row)"
+            >{{ scope.row.isSignUp ? '已报名' : '报名' }}</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
     <!-- 分页 当前页码，总页数，每页显示条数，背景色，布局，上一页，下一页，页码 -->
-    <el-pagination background layout="prev, pager, next" :total="totalNum" class="mt-4" :current-page="currentPage"
-      @update:current-page="handleCurrentChange"></el-pagination>
+    <el-pagination
+      background
+      layout="prev, pager, next"
+      :total="totalNum"
+      class="mt-4"
+      :current-page="currentPage"
+      @update:current-page="handleCurrentChange"
+    ></el-pagination>
 
     <!-- 添加或者编辑的弹出框 -->
     <el-dialog :title="dialogTitle" v-model="dialogVisible" width="50%" class="add-dialog">
@@ -89,14 +132,24 @@
         </el-form-item>
         <el-form-item label="竞赛类型" prop="type">
           <el-select v-model="form.type" placeholder="请选择竞赛类型">
-            <el-option v-for="item in competitionType" :key="item.value" :label="item.label"
-              :value="item.value"></el-option>
+            <el-option
+              v-for="item in competitionType"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="竞赛图片" prop="img">
-          <el-upload class="upload-demo" :action="`${baseURL}/api/file/upload`"
-            :headers="{ Authorization: 'Bearer ' + localStorage.getItem('token') }" :on-preview="handlePictureCardPreview"
-            :on-success="handleAvatarSuccess" :file-list="fileList" list-type="picture-card">
+          <el-upload
+            class="upload-demo"
+            :action="`${baseURL}/api/file/upload`"
+            :headers="{ Authorization: 'Bearer ' + localStorage.getItem('token') }"
+            :on-preview="handlePictureCardPreview"
+            :on-success="handleAvatarSuccess"
+            :file-list="fileList"
+            list-type="picture-card"
+          >
             <el-icon class="avatar-uploader-icon">
               <Plus />
             </el-icon>
@@ -118,9 +171,14 @@
           </el-table>
         </el-form-item>
         <el-form-item label="宣传视频" prop="video">
-          <el-upload class="upload-demo" :action="`${baseURL}/api/file/upload`"
-            :headers="{ Authorization: 'Bearer ' + localStorage.getItem('token') }" :on-success="handleVideoSuccess"
-            :file-list="videoList" :limit="1">
+          <el-upload
+            class="upload-demo"
+            :action="`${baseURL}/api/file/upload`"
+            :headers="{ Authorization: 'Bearer ' + localStorage.getItem('token') }"
+            :on-success="handleVideoSuccess"
+            :file-list="videoList"
+            :limit="1"
+          >
             <el-icon class="avatar-uploader-icon">
               <Plus />
             </el-icon>
@@ -130,7 +188,11 @@
           </el-dialog>
         </el-form-item>
         <el-form-item label="竞赛时间" prop="time">
-          <el-date-picker v-model="form.time" placeholder="选择日期时间" type="datetime"></el-date-picker>
+          <el-date-picker
+            v-model="form.time"
+            placeholder="选择日期时间"
+            type="datetime"
+          ></el-date-picker>
         </el-form-item>
         <el-form-item label="竞赛地点" prop="address">
           <el-input v-model="form.address" placeholder="请输入竞赛地点"></el-input>
@@ -144,7 +206,13 @@
 
     <!-- 报名对话框 -->
     <el-dialog title="报名" v-model="signUpVisible" width="50%" class="add-dialog">
-      <el-form :model="signUpForm" :rules="signUpRules" ref="signUpFormRef" label-width="100px" class="add-form">
+      <el-form
+        :model="signUpForm"
+        :rules="signUpRules"
+        ref="signUpFormRef"
+        label-width="100px"
+        class="add-form"
+      >
         <el-form-item label="姓名" prop="name">
           <el-input v-model="signUpForm.name" placeholder="请输入姓名"></el-input>
         </el-form-item>
@@ -215,8 +283,15 @@ const search = async () => {
     }
   })
   let list = res.data.list
+  const studentId = user.userInfo().studentId
   list.forEach((item: any) => {
     item.img = JSON.parse(item.img)
+    item.member.forEach((member: any) => {
+      // 如果可以找到自己的学号，就已经报名了
+      if (member.studentId == studentId) {
+        item.isSignUp = true
+      }
+    })
   })
   tableData.splice(0, tableData.length, ...list)
   totalNum.value = res.data.total

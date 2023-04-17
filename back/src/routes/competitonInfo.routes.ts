@@ -19,14 +19,23 @@ router.get('/', async (req, res) => {
   const connection = await dbConnect()
   const [rows, fields] = await connection.execute(
     `Select competition.*, JSON_ARRAYAGG(JSON_OBJECT('id', competitionmember.id, 'name', competitionmember.name, 'email', competitionmember.email, 'studentId', competitionmember.studentId, 'number', competitionmember.number, 'mobile', competitionmember.mobile
-    )) as member from competition left join competitionmember on competition.id = competitionmember.parentid ${where.length > 0 ? 'where ' + where.join(' and ') : ''} group by competition.id order by time desc limit ${(page - 1) * pageSize}, ${pageSize}`
+    )) as member from competition left join competitionmember on competition.id = competitionmember.parentid ${
+      where.length > 0 ? 'where ' + where.join(' and ') : ''
+    } group by competition.id order by time desc limit ${
+      (page - 1) * pageSize
+    }, ${pageSize}`
   )
   const [count, fields2] = await connection.execute(
-    `Select count(*) as count from competition ${where.length > 0 ? 'where ' + where.join(' and ') : ''}`
+    `Select count(*) as count from competition ${
+      where.length > 0 ? 'where ' + where.join(' and ') : ''
+    }`
   )
   const list: any = rows
   list.forEach((item, index) => {
     item.index = (page - 1) * pageSize + index + 1
+    if (item.member.length == 1 && item.member[0].id == null) {
+      item.member = []
+    }
   })
   res.status(200).json({
     message: '获取文章列表成功',
@@ -91,7 +100,7 @@ router.post('/delete', async (req, res) => {
 
 //报名
 router.post('/signUp', async (req, res) => {
-  const { parentId, name, email, studentId, mobile,remark } = req.body
+  const { parentId, name, email, studentId, mobile, remark } = req.body
   // 生成主键id和报名时间和number
   const id = uuidv4()
   const date = new Date()
@@ -105,8 +114,19 @@ router.post('/signUp', async (req, res) => {
   const connection = await dbConnect()
 
   await connection.execute(
-    'Insert into competitionmember (id, parentid, name, email, studentid, number, state, date, mobile, remark) values (?, ?, ?, ?, ?, ?,"未读", ?)',
-    [id, parentId, name, email, studentId, number, date, mobile, remark]
+    'Insert into competitionmember (id, parentid, name, email, studentid, number, state, date, mobile, remarks) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+    [
+      id,
+      parentId,
+      name,
+      email,
+      studentId,
+      number,
+      0,
+      date,
+      mobile,
+      remark || '',
+    ]
   )
 
   res.status(200).json({

@@ -19,7 +19,7 @@ const onSubmitLogin = (e: Event) => {
   // 获取表单数据
   const formData = new FormData(e.target as HTMLFormElement)
   // 获取表单数据
-  const name:any = formData.get('loginName')
+  const name: any = formData.get('loginName')
   const password = formData.get('password')
   // 验证表单数据
   // 如果其中有一项为空,则提示用户
@@ -44,7 +44,12 @@ const onSubmitLogin = (e: Event) => {
         // 将token存储到本地
         localStorage.setItem('token', res.token)
         // 跳转到首页
-        router.push('/')
+        // 如果res.email, res.username, res.role, res.name, res.studentId, res.mobile有空值，跳转到个人信息页面
+        if (res.email && res.username && res.role && res.name && res.studentId && res.mobile) {
+          router.push('/')
+        } else {
+          router.push('/usercenter')
+        }
       } else {
         ElMessage.error(res.msg)
       }
@@ -417,18 +422,40 @@ const onSubmitLogin = (e: Event) => {
           <div class="indicator"></div>
         </label>
         <!-- 右下角忘记密码 -->
-        <a id="forgotPassword" v-on:click="isRegister = true; forgotPassword = true">忘记密码?</a>
+        <a
+          id="forgotPassword"
+          v-on:click="
+            () => {
+              forgotPassword = true
+              isRegister = false
+            }
+          "
+          >忘记密码?</a
+        >
       </div>
       <div class="inputGroup inputGroup3">
         <button id="login" type="submit">登录</button>
         <!-- 没有账号立即注册 -->
         <!-- 点击修改isRegister为true -->
-        <a id="register" v-on:click="isRegister = true; forgotPassword = false">没有账号?立即注册</a>
+        <a
+          id="register"
+          v-on:click="
+            () => {
+              forgotPassword = false
+              isRegister = true
+            }
+          "
+          >没有账号?立即注册</a
+        >
       </div>
     </form>
     <!-- 注册 -->
     <!-- 把forgotPassword传过去 -->
-    <Register v-if="isRegister" @close="isRegister = false" :forgotPassword="forgotPassword"></Register>
+    <Register
+      v-if="isRegister"
+      @close="isRegister = false"
+      :forgotPassword="forgotPassword"
+    ></Register>
   </div>
 </template>
 <!-- scss -->
