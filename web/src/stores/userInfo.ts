@@ -7,6 +7,9 @@ export const userInfoStore = defineStore('userInfo', () => {
     email: '',
     username: '',
     role: '',
+    name: '',
+    studentId: '',
+    mobile: '',
   })
   const userInfo = () => {
     if (user.value.email === '') {
@@ -14,10 +17,13 @@ export const userInfoStore = defineStore('userInfo', () => {
     }
     return user.value
   }
-  const setUserInfo = (email: string, username: string, role: string) => {
+  const setUserInfo = (email: string, username: string, role: string, name: string, studentId: string, mobile: string) => {
     user.value.email = email
     user.value.username = username
     user.value.role = role
+    user.value.name = name
+    user.value.studentId = studentId
+    user.value.mobile = mobile
     localStorage.setItem('userInfo', JSON.stringify(user.value))
   }
   return {

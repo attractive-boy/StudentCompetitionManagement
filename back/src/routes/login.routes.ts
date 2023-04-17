@@ -39,6 +39,9 @@ router.post('/', async (req, res) => {
       role: rows[0].role,
       username: rows[0].username,
       email: rows[0].email,
+      name: rows[0].name,
+      studentId: rows[0].studentId,
+      mobile: rows[0].mobile,
     })
   } else {
     res.status(200).json({

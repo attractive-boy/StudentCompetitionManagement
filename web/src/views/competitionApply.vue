@@ -151,14 +151,8 @@
         <el-form-item label="学号" prop="studentId">
           <el-input v-model="signUpForm.studentId" placeholder="请输入学号"></el-input>
         </el-form-item>
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="signUpForm.email" placeholder="请输入邮箱"></el-input>
-        </el-form-item>
         <el-form-item label="联系方式" prop="mobile">
           <el-input v-model="signUpForm.mobile" placeholder="请输入联系方式"></el-input>
-        </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input type="textarea" v-model="signUpForm.remark" placeholder="请输入备注"></el-input>
         </el-form-item>
       </el-form>
       <span class="dialog-footer">
@@ -343,18 +337,17 @@ const signUpVisible = ref(false)
 
 const signUpForm = reactive({
   name: '',
+  mobile: '',
   email: '',
   studentId: '',
-  parentId: '',
-  mobile: '',
-  remark: ''
+  parentId: ''
 })
 
 const signUpRules = reactive({
   name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
+  mobile: [{ required: true, message: '请输入手机号', trigger: 'blur' }],
   email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],
-  studentId: [{ required: true, message: '请输入学号', trigger: 'blur' }],
-  mobile: [{ required: true, message: '请输入手机号', trigger: 'blur' }]
+  studentId: [{ required: true, message: '请输入学号', trigger: 'blur' }]
 })
 
 const signUpFormRef = ref<FormInstance>()
@@ -381,11 +374,6 @@ const signUp = async () => {
 const openSignUp = (index: number, row: any) => {
   signUpVisible.value = true
   signUpForm.parentId = row.id
-  signUpForm.name = user.userInfo().name
-  signUpForm.email = user.userInfo().email
-  signUpForm.studentId = user.userInfo().studentId
-  signUpForm.mobile = user.userInfo().mobile
-  console.log(user.userInfo())
 }
 </script>
 

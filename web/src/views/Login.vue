@@ -40,7 +40,7 @@ const onSubmitLogin = (e: Event) => {
       if (res.code === 200) {
         ElMessage.success('登录成功')
         //存储用户信息
-        userInfo.setUserInfo(res.email, res.username, res.role)
+        userInfo.setUserInfo(res.email, res.username, res.role, res.name, res.studentId, res.mobile)
         // 将token存储到本地
         localStorage.setItem('token', res.token)
         // 跳转到首页
