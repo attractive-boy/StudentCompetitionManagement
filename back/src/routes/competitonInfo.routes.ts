@@ -19,15 +19,12 @@ router.get('/', async (req, res) => {
   const connection = await dbConnect()
   const [rows, fields] = await connection.execute(
     `Select competition.*, JSON_ARRAYAGG(JSON_OBJECT('id', competitionmember.id, 'name', competitionmember.name, 'email', competitionmember.email, 'studentId', competitionmember.studentId, 'number', competitionmember.number, 'mobile', competitionmember.mobile
-    )) as member from competition left join competitionmember on competition.id = competitionmember.parentid ${
-      where.length > 0 ? 'where ' + where.join(' and ') : ''
-    } group by competition.id order by time desc limit ${
-      (page - 1) * pageSize
+    )) as member from competition left join competitionmember on competition.id = competitionmember.parentid ${where.length > 0 ? 'where ' + where.join(' and ') : ''
+    } group by competition.id order by time desc limit ${(page - 1) * pageSize
     }, ${pageSize}`
   )
   const [count, fields2] = await connection.execute(
-    `Select count(*) as count from competition ${
-      where.length > 0 ? 'where ' + where.join(' and ') : ''
+    `Select count(*) as count from competition ${where.length > 0 ? 'where ' + where.join(' and ') : ''
     }`
   )
   const list: any = rows
@@ -91,6 +88,10 @@ router.post('/update', async (req, res) => {
 router.post('/delete', async (req, res) => {
   const { id } = req.body
   const connection = await dbConnect()
+  //先删除子表中的数据，再删除主表中的数据
+  await connection.execute('Delete from competitionmember where parentid = ?', [
+    id,
+  ])
   await connection.execute('Delete from competition where id = ?', [id])
   res.status(200).json({
     message: '删除文章成功',
