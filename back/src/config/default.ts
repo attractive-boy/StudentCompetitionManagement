@@ -2,9 +2,9 @@ export default {
   port: 81,
 
   // 数据库配置
-  dbUri: '20.120.88.159',
+  dbUri: '47.115.206.168',
   dbUser: 'root',
-  dbPassword: '010294',
+  dbPassword: 'admin',
   dbAuthSource: 'StudentCompetitionManagement',
 
   JWT_SECRET:
