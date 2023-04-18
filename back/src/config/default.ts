@@ -4,8 +4,8 @@ export default {
   // 数据库配置
   dbUri: '47.115.206.168',
   dbUser: 'root',
-  dbPassword: 'admin',
-  dbAuthSource: 'StudentCompetitionManagement',
+  dbPassword: '404NotFound',
+  dbAuthSource: 'studentcompetitionmanagement',
 
   JWT_SECRET:
     'tKf4CjNBk2oidBTBJe1OSBvYrRaS9m5qjwwA_cZsoSwWxteUOqdjc_1nnHxkowmTRZOjxZDjZ1Mh09pzD2MWPvfk0qXEGGUmK1yIOWpoLs5b-PkcNqPrs9pmq8Ns10AehC6gP37KKNGeG3Va92JkN3PV94baYenhkxM0c3kOsCvhGurWeGAj1WsP8IZ4faT2_V54WddF1tS1dbk1YgWZLyYQdlzpe5t6GdVGa3znYXeXCJ8hnhPD2Md1DMksdKPCiY6I3lsfQz9hx5XtZgoHe-heMFOuOzZepD08MdiW5zqgUtWlKJQwASy9-yqt4OrlTssrXM813TNtF0sz3p7h8w',

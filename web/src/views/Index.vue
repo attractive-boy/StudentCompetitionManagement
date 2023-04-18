@@ -91,37 +91,33 @@
                 </el-carousel-item>
               </el-carousel>
             </el-col>
-            <el-col :span="16">
-              <el-card class="box-card">
-                <div class="clearfix">
-                  <span>竞赛参与统计</span>
-                </div>
-                <div id="main" style="width: 100%; height: 210px"></div>
-              </el-card>
+            <el-col :span="16" class="index-down left">
+              <div class="clearfix">
+                <span>竞赛参与统计</span>
+              </div>
+              <div id="main" style="width: 100%; height: 210px"></div>
             </el-col>
-            <el-col :span="8">
-              <el-card class="box-card">
-                <div class="clearfix">
-                  <span>高分榜</span>
-                </div>
-                <div style="width: 100%; height: 210px">
-                  <ul class="infinite-list" style="overflow: auto" id="scroll">
-                    <li v-for="item in tableData" :key="item.id" class="infinite-list-item">
-                      <el-row>
-                        <el-col :span="8">
-                          <span>{{ item.name }}</span>
-                        </el-col>
-                        <el-col :span="8">
-                          <span>{{ item.grade }}</span>
-                        </el-col>
-                        <el-col :span="8">
-                          <span>{{ item.title }}</span>
-                        </el-col>
-                      </el-row>
-                    </li>
-                  </ul>
-                </div>
-              </el-card>
+            <el-col :span="8" class="index-down">
+              <div class="clearfix">
+                <span>高分榜</span>
+              </div>
+              <div style="width: 100%; height: 210px">
+                <ul class="infinite-list" style="overflow: auto" id="scroll">
+                  <li v-for="item in tableData" :key="item.id" class="infinite-list-item">
+                    <el-row>
+                      <el-col :span="8">
+                        <span>{{ item.name }}</span>
+                      </el-col>
+                      <el-col :span="8">
+                        <span>{{ item.grade }}</span>
+                      </el-col>
+                      <el-col :span="8">
+                        <span>{{ item.title }}</span>
+                      </el-col>
+                    </el-row>
+                  </li>
+                </ul>
+              </div>
             </el-col>
           </el-row>
         </div>
@@ -261,6 +257,7 @@ const echartinit = () => {
         height: 100%;
         background-color: #fff;
         border-radius: 10px;
+        overflow: hidden;
         .grid-content {
           padding: 20px;
         }
@@ -280,6 +277,16 @@ const echartinit = () => {
             background-color: rgba(0, 0, 0, 0.3);
             color: #fff;
             padding: 10px 0;
+          }
+        }
+        .index-down {
+          width: 100%;
+          height: 100%;
+          background-color: #fff;
+          padding: 20px;
+          border-top: 2px solid #e9e9e9;
+          &.left {
+            border-right: 2px solid #e9e9e9;
           }
         }
         .clearfix {
