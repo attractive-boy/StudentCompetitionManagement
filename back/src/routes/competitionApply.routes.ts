@@ -15,13 +15,11 @@ router.get('/', async (req, res) => {
   const connection = await dbConnect()
   //   competitionmember 连接主表 competition
   const [rows, fields] = await connection.execute(
-    `Select competitionmember.*, competition.title, competition.type,competition.time, competition.address from competitionmember left join competition on competitionmember.parentid = competition.id ${
-      where.length > 0 ? 'where ' + where.join(' and ') : ''
+    `Select competitionmember.*, competition.title, competition.type,competition.time, competition.address from competitionmember left join competition on competitionmember.parentid = competition.id ${where.length > 0 ? 'where ' + where.join(' and ') : ''
     } order by time desc limit ${(page - 1) * pageSize}, ${pageSize}`
   )
   const [count, fields2] = await connection.execute(
-    `Select count(*) as count from competitionmember ${
-      where.length > 0 ? 'where ' + where.join(' and ') : ''
+    `Select count(*) as count from competitionmember ${where.length > 0 ? 'where ' + where.join(' and ') : ''
     }`
   )
   const list: any = rows
@@ -39,7 +37,7 @@ router.get('/', async (req, res) => {
 })
 
 //删除
-router.delete('/delete', async (req, res) => {
+router.post('/delete', async (req, res) => {
   const { id } = req.body
   const connection = await dbConnect()
   await connection.execute('Delete from competitionmember where id = ?', [id])
@@ -73,7 +71,7 @@ router.post('/grade', async (req, res) => {
   // 更新排名
   list.forEach(async (item) => {
     await connection.execute(
-      'Update competitionmember set rank = ? where id = ?',
+      'UPDATE `studentcompetitionmanagement`.`competitionmember` set `rank` = ? where id = ?',
       [item.rank, item.id]
     )
   })
@@ -88,8 +86,7 @@ router.get('/highScore', async (req, res) => {
   const { page, pageSize }: any = req.query
   const connection = await dbConnect()
   const [rows, fields] = await connection.execute(
-    `Select competitionmember.*, competition.title, competition.type,competition.time, competition.address from competitionmember left join competition on competitionmember.parentid = competition.id order by grade desc limit ${
-      (page - 1) * pageSize
+    `Select competitionmember.*, competition.title, competition.type,competition.time, competition.address from competitionmember left join competition on competitionmember.parentid = competition.id order by grade desc limit ${(page - 1) * pageSize
     }, ${pageSize}`
   )
   const [count, fields2] = await connection.execute(

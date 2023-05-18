@@ -21,14 +21,15 @@
             <el-menu-item index="/changepassword">修改密码</el-menu-item>
             <el-menu-item index="/usercenter">个人中心</el-menu-item>
           </el-sub-menu>
-          <el-sub-menu index="2" v-if="user.userInfo().role === 'teacher'">
+          <el-sub-menu index="2">
             <template #title>
               <el-icon>
                 <document />
               </el-icon>
-              <span>公告信息管理</span>
+              <span>公告信息{{ user.userInfo().role == 'teacher' ? '管理' : '' }}</span>
             </template>
-            <el-menu-item index="/officialnews">公告信息</el-menu-item>
+            <el-menu-item v-if="user.userInfo().role === 'teacher'" index="/officialnews">公告信息</el-menu-item>
+            <el-menu-item v-else index="/showofficialnews">公告信息</el-menu-item>
           </el-sub-menu>
           <!-- 学生管理 -->
           <el-sub-menu v-if="user.userInfo().role === 'teacher'" index="3">
@@ -74,18 +75,12 @@
           <RouterView />
           <!-- 网格布局上面一个下面两个，间距20px -->
           <!-- 如果不是首页就隐藏 hidden -->
-          <el-row
-            :gutter="20"
-            class="grid-content"
-            :style="{ visibility: vueWindow.location.pathname === '/' ? 'visible' : 'hidden' }"
-          >
+          <el-row :gutter="20" class="grid-content"
+            :style="{ visibility: vueWindow.location.pathname === '/' ? 'visible' : 'hidden' }">
             <el-col :span="24" style="margin-bottom: 20px">
               <el-carousel indicator-position="outside">
                 <el-carousel-item v-for="item in carousel" :key="item">
-                  <div
-                    :style="{ backgroundImage: 'url(' + JSON.parse(item.img)[0] + ')' }"
-                    class="carousel-img"
-                  >
+                  <div :style="{ backgroundImage: 'url(' + JSON.parse(item.img)[0] + ')' }" class="carousel-img">
                     <h1 class="carousel-title">{{ item.title }}</h1>
                   </div>
                 </el-carousel-item>
@@ -168,7 +163,7 @@ const getHighScore = async () => {
   })
   tableData.value = tableData.value.concat(res.data.list)
 }
-const scroll = () => {}
+const scroll = () => { }
 const competitionStatics = ref([])
 //获取不同竞赛的报名人数
 const getCompetitionApply = async () => {
@@ -258,15 +253,18 @@ const echartinit = () => {
         background-color: #fff;
         border-radius: 10px;
         overflow: hidden;
+
         .grid-content {
           padding: 20px;
         }
+
         .carousel-img {
           width: 100%;
           height: 100%;
           background-size: cover;
           background-position: center;
           background-repeat: no-repeat;
+
           // 标题再最下面，文字居中，黑色背景，透明度0.5
           .carousel-title {
             position: absolute;
@@ -279,24 +277,30 @@ const echartinit = () => {
             padding: 10px 0;
           }
         }
+
         .index-down {
           width: 100%;
           height: 100%;
           background-color: #fff;
           padding: 20px;
           border-top: 2px solid #e9e9e9;
+
           &.left {
             border-right: 2px solid #e9e9e9;
           }
         }
+
         .clearfix {
+
           // 加粗，大号
           span {
             font-weight: 700;
             font-size: 20px;
           }
         }
+
         .infinite-list {
+
           // 高分榜 一次五条
           li {
             height: 40px;
@@ -308,5 +312,4 @@ const echartinit = () => {
       }
     }
   }
-}
-</style>
+}</style>

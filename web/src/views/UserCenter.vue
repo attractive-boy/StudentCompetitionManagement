@@ -6,6 +6,9 @@ picture	头像
 Mobile Number	手机号 -->
   <div class="form">
     <el-form :model="form" ref="ruleFormRef" label-width="200px" size="large" :rules="rules">
+      <el-form-item style="height: 0;">
+        <el-button class="submitBtn" type="primary" @click="submitForm(ruleFormRef)">提交</el-button>
+      </el-form-item>
       <!-- 用户名 -->
       <el-form-item label="用户名" prop="username">
         <el-input v-model="form.username" placeholder="请输入用户名"></el-input>
@@ -30,20 +33,14 @@ Mobile Number	手机号 -->
         <el-input v-model="form.mobile" placeholder="请输入手机号"></el-input>
       </el-form-item>
       <el-form-item label="头像" prop="avatar">
-        <el-upload
-          class="avatar-uploader"
-          :show-file-list="false"
-          :on-success="handleAvatarSuccess"
-          :before-upload="beforeAvatarUpload"
-          :action="`${baseURL}/api/file/upload`"
-          :headers="{ Authorization: 'Bearer ' + localStorage.getItem('token') }"
-        >
+        <el-upload class="avatar-uploader" :show-file-list="false" :on-success="handleAvatarSuccess"
+          :before-upload="beforeAvatarUpload" :action="`${baseURL}/api/file/upload`"
+          :headers="{ Authorization: 'Bearer ' + localStorage.getItem('token') }">
           <img v-if="form.avatar" :src="form.avatar" class="avatar" />
-          <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+          <el-icon v-else class="avatar-uploader-icon">
+            <Plus />
+          </el-icon>
         </el-upload>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="submitForm(ruleFormRef)">提交</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -109,7 +106,7 @@ const rules = {
   ],
   studentId: [
     { required: true, message: '请输入学号', trigger: 'blur' },
-    { min: 10, max: 10, message: '长度为 10 个字符', trigger: 'blur' }
+    { min: 8, max: 8, message: '长度为 8 个字符', trigger: 'blur' }
   ],
   gender: [{ required: true, message: '请选择性别', trigger: 'blur' }],
   mobile: [
@@ -171,5 +168,10 @@ const beforeAvatarUpload = (file: any) => {
   width: 178px;
   height: 178px;
   text-align: center;
+}
+.submitBtn{
+  position: fixed;
+  right: 5%;
+  margin-top: 20px;
 }
 </style>
