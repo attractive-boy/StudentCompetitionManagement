@@ -76,7 +76,7 @@
           <!-- 网格布局上面一个下面两个，间距20px -->
           <!-- 如果不是首页就隐藏 hidden -->
           <el-row :gutter="20" class="grid-content"
-            :style="{ visibility: vueWindow.location.pathname === '/' ? 'visible' : 'hidden' }">
+            :style="{ visibility: vueWindow.location.pathname === '/' ? 'visible' : 'hidden',zIndex: vueWindow.location.pathname === '/' ? '1' : '-999' }">
             <el-col :span="24" style="margin-bottom: 20px">
               <el-carousel indicator-position="outside">
                 <el-carousel-item v-for="item in carousel" :key="item">
