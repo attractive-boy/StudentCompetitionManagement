@@ -1,4 +1,5 @@
 <template>
+  <div class="show-official-news">
   <el-row :gutter="20" class="grid-content">
     <el-col :span="24" style="margin-bottom: 20px">
       <el-carousel indicator-position="outside">
@@ -25,30 +26,34 @@
     </el-col>
     <!-- 下面采用一行两个展示公告，左边图片，右边上面是标题，中间部分内容，下面是查看详情按钮 -->
     <el-col :span="24">
-      <el-row :gutter="20">
-        <el-col :span="12" v-for="item in noticeList" :key="item.id">
+      <el-row :gutter="20" class="notice">
+        <el-col :span="12" v-for="item in noticeList.data" :key="item.id" v-if="noticeList.data.length > 0">
           <div class="notice-item">
             <div class="notice-item-img">
-              <img :src="item.img" alt="" />
+              <img :src="JSON.parse(item.img)[0]" alt="" />
             </div>
             <div class="notice-item-content">
               <div class="notice-item-title">{{ item.title }}</div>
-              <div class="notice-item-desc">{{ item.content }}</div>
+              <!-- innerhtml -->
+              <div class="notice-item-desc" v-html="item.content"></div>
               <div class="notice-item-time">{{ item.time }}</div>
               <div class="notice-item-btn">
-                <el-button type="primary" @click="handleDetail(item.id)">查看详情</el-button>
+                <el-button type="primary" @click="handleDetail(item.content)">查看详情</el-button>
               </div>
             </div>
           </div>
         </el-col>
+        <el-col :span="24" v-else>
+          <div style="text-align: center">暂无数据</div>
+        </el-col>
       </el-row>
     </el-col>
   </el-row>
+</div>
 </template>
 
 <script lang="ts" setup>
-import { noticeType } from '@/enum'
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, h } from 'vue'
 import request, { baseURL } from '@/utils/request'
 import { userInfoStore } from '@/stores/userInfo'
 // 导入tinyMCE
@@ -59,25 +64,53 @@ const carousel = ref([
   'src/assets/img/d7e3766a7ad7b353227de74b973ea9e1.jpeg',
   'src/assets/img/dc55010ce15b126f0e5e07c9785418f0.jpg'
 ])
-
+const noticeList:any = reactive({
+  data: []
+})
+onMounted(async () => {
+  // 获取公告信息
+  const res = await request.get('/api/officialNewsInfo', {
+    params: {
+      page: 1,
+      pageSize: 999999999999999,
+    }
+  })
+  console.log(res.data.list)
+  noticeList.data = [...res.data.list]
+})
 const form = reactive({
   title: ''
 })
-
-const search = () => {
-  request({
-    url: '/api/notice/search',
-    method: 'post',
-    data: {
-      title: form.title
+const search = async () => {
+  const res = await request.get('/api/officialNewsInfo', {
+    params: {
+      ...form,
+      page: 1,
+      pageSize: 999999999999999,
     }
-  }).then((res) => {
-    console.log(res)
+  })
+  noticeList.data = [...res.data.list]
+}
+//弹窗展示详情
+const handleDetail = (content:string) => {
+  ElMessageBox({
+    title: '详情',
+    message: h('div', {
+      innerHTML: content
+    }),
+    dangerouslyUseHTMLString: true,
+    showCancelButton: false,
   })
 }
 </script>
 
 <style scoped lang="scss">
+.show-official-news{
+  width: calc(100% - 40px);
+  height: 100%;
+  margin: 20px;
+  overflow: auto;
+}
 .clearfix{
     display: flex;
     justify-content: space-between;
@@ -95,8 +128,8 @@ const search = () => {
     }
 
 }
-
-.notice-item{
+.notice{
+  .notice-item{
     display: flex;
     margin-bottom: 20px;
     .notice-item-img{
@@ -123,10 +156,12 @@ const search = () => {
             margin-bottom: 20px;
         }
         .notice-item-btn{
-            text-align: right;
+            text-align: left;
         }
     }
 }
+}
+
 
 </style>
 
